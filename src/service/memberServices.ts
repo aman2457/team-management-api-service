@@ -11,7 +11,6 @@ export const getMemberById = async (id: string) => {
 }
 
 export const createMember = async (member: any) => {
-    console.log(member);
     const newMember = await databaseClient.from("users").insert({...member}).select();
     return newMember;
 }
