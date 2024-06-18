@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf build && npx tsc -p .",
     "start": "node ./build/api/index.js",
-    "dev": "npx nodemon src/app.ts"
+    "dev": "npm run build && npx nodemon src/app.ts"
   },
   "repository": {
     "type": "git",

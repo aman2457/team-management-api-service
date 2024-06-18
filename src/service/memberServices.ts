@@ -1,8 +1,17 @@
 import databaseClient from "../datasource/dbClient";
 
-export const getAllMembers = async () => {
-  const members = await databaseClient.from("users").select("*");
-  return members;
+export const getAllMembers = async (page: number | null, limit: number | null) => {
+    if (!page || !limit) {
+        const members = await databaseClient.from("users").select("*");
+        return members;
+    }
+    const members = await databaseClient.from("users").select("*").range(page, limit).order("id", { ascending: true });
+    return members;
+}
+
+export const getTotalCount = async () => {
+    const members = await databaseClient.from("users").select("*", { count: "exact", head: true });
+    return members.count;
 }
 
 export const getMemberById = async (id: string) => {
@@ -11,7 +20,7 @@ export const getMemberById = async (id: string) => {
 }
 
 export const createMember = async (member: any) => {
-    const newMember = await databaseClient.from("users").insert({...member}).select();
+    const newMember = await databaseClient.from("users").insert({ ...member }).select();
     return newMember;
 }
 

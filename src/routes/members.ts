@@ -1,14 +1,19 @@
 import { Router, Request, Response } from "express";
-import { createMember, deleteMember, getAllMembers, getMemberById, updateMember } from "../service/memberServices";
+import { createMember, deleteMember, getAllMembers, getMemberById, getTotalCount, updateMember } from "../service/memberServices";
 
 const membersRouter = Router();
 
 membersRouter.get("/", async (req: Request, res: Response) => {
-  const members = await getAllMembers();
+  const page = Number(req.query.page) || null;
+  const limit = Number(req.query.limit) || null;
+  const members = await getAllMembers(page, limit);
+
+
+  const totalCount = await getTotalCount();
   if(members.data){
     return res.json({
       members: members.data,
-      count: members.data.length
+      count: totalCount
     });
   }
   if(members.error) return res.status(500).json({ error: members.error });
